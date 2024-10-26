@@ -1,0 +1,16 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Chat from "@/components/Chat";
+const { user_name} = Astro.params;
+---
+
+<Layout title="Welcome to Astro.">
+	<main class="flex justify-center items-center flex-wrap h-screen">
+		<div class="flex flex-wrap gap-10">
+			<div class="text-center w-full text-lg">
+				Who are you looking for?
+			</div>
+			<Chat client:only="react" user_name={user_name ?? ""} />
+		</div>
+	</main>
+</Layout>
