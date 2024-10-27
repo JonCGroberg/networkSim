@@ -2,7 +2,7 @@ import { useState } from 'react';
 import {
     Button,
 } from "@/components/ui/button"
-import { Input } from './ui/input';
+import { Input } from '@/components/ui/input';
 import { navigate } from "astro:transitions/client";
 import type { UserProfile } from "@/types/User";
 import { mainUser, saveMainUser } from '@/store/User';

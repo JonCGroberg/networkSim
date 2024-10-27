@@ -1,7 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Chat from "@/components/Chat";
-const { user_name} = Astro.params;
 ---
 
 <Layout title="Networker" transition:animate="slide">
@@ -10,7 +9,7 @@ const { user_name} = Astro.params;
 			<div class="text-center w-full text-lg">
 				Who are you looking for?
 			</div>
-			<Chat client:only="react" user_name={user_name ?? ""} />
+			<Chat client:only="react"  />
 		</div>
 	</main>
 </Layout>

@@ -8,7 +8,8 @@ import { Textarea } from "./ui/textarea"
 import { useStore } from '@nanostores/react'
 import { mainUser } from '@/store/User'
 import { generateSessionId } from "@/utils/session"
-// import type { UserProfile } from "@/types/User"
+import { navigate } from "astro:transitions/client"
+import { dashboardData } from "@/store/Dashboard"
 
 interface ChatItem {
   speaker: string
@@ -16,7 +17,7 @@ interface ChatItem {
   text: string
 }
 
-export default function Chat({ user_name }: { user_name: string }) {
+export default function Chat() {
   const [chatHistory, setChatHistory] = useState<ChatItem[]>([]);
   const [userInput, setUserInput] = useState<string>("");
   const [sessionId, setSessionId] = useState(generateSessionId());
@@ -37,7 +38,7 @@ export default function Chat({ user_name }: { user_name: string }) {
 
   async function sendUserMessage(message: string) {
     const url = "https://kayecho-364607428894.us-central1.run.app/langChainHandler"
-    const payload = { token: sessionId, text: String(message), linkedin_id:"" }
+    const payload = { token: sessionId, text: String(message) }
 
     console.log(payload)
     try {
@@ -58,7 +59,7 @@ export default function Chat({ user_name }: { user_name: string }) {
   };
 
   async function sendIdealProfile() {
-    const payload = { token: sessionId, text: String(idealProfile) }
+    const payload = { token: sessionId, text: String(idealProfile), linkedin_id: "https://www.linkedin.com/in/jonathan-groberg/" }
     const url = 'https://kayecho-364607428894.us-central1.run.app/langChainHandlerSearch'
 
     try {
@@ -72,7 +73,10 @@ export default function Chat({ user_name }: { user_name: string }) {
 
       const data = await response.json();
       console.log(data);
-      return data;
+
+      dashboardData.set(data);
+      navigate("/dashboard")
+      // return data;
     } catch (error) {
       console.error('Error:', error);
     }
@@ -108,10 +112,6 @@ export default function Chat({ user_name }: { user_name: string }) {
     console.log(botMsg, profile_user)
   }
 
-  function handleSearch(e: any) {
-    sendIdealProfile();
-  }
-
   return (
     // <div className="grid md:grid-cols-[300px_1fr] gap-6">
     <ResizablePanelGroup direction="horizontal" className={chatHistory.length > 0 ? "rounded-lg border shadow-sm min-h-[500px] max-w-[900px] mx-auto" : "rounded-lg border shadow-sm mx-auto max-w-[700px] "}>
@@ -119,7 +119,7 @@ export default function Chat({ user_name }: { user_name: string }) {
         <div className="flex flex-col h-full">
           <Textarea className=" rounded-none border-none p-5 flex-grow " value={idealProfile} onChange={(e) => setIdealProfile(e.target.value)} />
           <div className="w-full p-5 border-t">
-            <Button disabled={chatHistory.length < 4} className="bg-red-500 hover:bg-red-700 w-full" onClick={(e) => handleSearch(e)}>Find Matches</Button>
+            <Button disabled={chatHistory.length < 1} className="bg-red-500 hover:bg-red-700 w-full" onClick={sendIdealProfile}>Find Matches</Button>
           </div>
         </div>
       </ResizablePanel>
