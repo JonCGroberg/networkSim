@@ -20,17 +20,12 @@ interface ChatItem {
 
 export default function Simulation({ simulatedUser, picture }: { simulatedUser: any, picture: string }) {
     const [chatHistory, setChatHistory] = useState<ChatItem[]>([]);
-    const [userInput, setUserInput] = useState<string>("");
-    const [sessionId, setSessionId] = useState(generateSessionId());
-
-    console.log(simulatedUser)
 
     const chatContentRef = useRef<HTMLDivElement>(null);
     const userProfile = useStore(mainUser);
     const storedData = useStore(dashboardData);
 
     useEffect(() => {
-
         if (chatContentRef.current) {
             chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
         }
