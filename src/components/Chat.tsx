@@ -59,7 +59,7 @@ export default function Chat() {
   };
 
   async function sendIdealProfile() {
-    const payload = { token: sessionId, text: String(idealProfile), linkedin_id: "https://www.linkedin.com/in/jonathan-groberg/" }
+    const payload = { token: sessionId+1, text: String(idealProfile), linkedin_id: userProfile?.response.linkedin }
     const url = 'https://kayecho-364607428894.us-central1.run.app/langChainHandlerSearch'
 
     try {
@@ -131,7 +131,7 @@ export default function Chat() {
               <CardHeader className="flex flex-row items-center border-b px-4 py-3">
                 <div className="flex items-center space-x-3">
                   <Avatar>
-                    <AvatarImage src="/placeholder-user.jpg" alt="Business Logo" />
+                    <AvatarImage src={userProfile?.response.picture} alt="Business Logo" />
                     <AvatarFallback>{userProfile?.response.first_name[0] + "" + userProfile?.response.last_name[0]}</AvatarFallback>
                   </Avatar>
                   <div>
