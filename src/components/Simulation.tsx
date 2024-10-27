@@ -6,7 +6,7 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "./ui/resiz
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { AvatarFallback, AvatarImage, Avatar } from "./ui/avatar";
 import { SendIcon } from "lucide-react";
-import { dashboardData } from "@/store/Dashboard";
+import { dashboardData, type DashboardData } from "@/store/Dashboard";
 import { navigate } from "astro:transitions/client";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -23,19 +23,48 @@ export default function Simulation({ simulatedUser, picture }: { simulatedUser: 
     const [userInput, setUserInput] = useState<string>("");
     const [sessionId, setSessionId] = useState(generateSessionId());
 
+    console.log(simulatedUser)
+
     const chatContentRef = useRef<HTMLDivElement>(null);
     const userProfile = useStore(mainUser);
-
+    const storedData = useStore(dashboardData);
 
     useEffect(() => {
+
         if (chatContentRef.current) {
             chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
         }
 
-        generateSessionId()
-    });
+        async function simulate() {
+            const url = "https://kayecho-364607428894.us-central1.run.app/simulateConversation"
 
+            const payload_simulate_conversation = {
+                "linkedin_1": simulatedUser.linkedin_url,
+                "linkedin_2": userProfile?.response.linkedin
+            }
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(payload_simulate_conversation),
+                });
 
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log(data);
+                setChatHistory(data.response);
+            } catch (error) {
+                console.error("Error calling API:", error);
+            }
+        }
+
+        simulate();
+    },[simulatedUser]);
 
     return (
         <Card className="w-full h-[600px] mx-auto  flex flex-col py-2">
@@ -63,7 +92,7 @@ export default function Simulation({ simulatedUser, picture }: { simulatedUser: 
                     </span>
                 </div>
             </CardHeader>
-            <CardContent ref={chatContentRef} className="px-4 flex-grow py-6 space-y-4 max-h-[400px] overflow-scroll">
+            <CardContent ref={chatContentRef} className="px-4 flex-grow py-6 space-y-4  overflow-scroll">
                 {chatHistory.map((chatItem, index) => chatItem.speaker === "B" ?
                     <div key={index} className="chat-message flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm ml-auto bg-primary text-gray-50 dark:bg-primary dark:text-gray-50">
                         {chatItem.text}
@@ -72,7 +101,6 @@ export default function Simulation({ simulatedUser, picture }: { simulatedUser: 
                         {chatItem.text}
                     </div>
                 )}
-
             </CardContent>
         </Card>
     )

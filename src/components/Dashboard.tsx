@@ -11,19 +11,19 @@ import type { UserProfile } from "@/types/User"
 
 const data = {
   dashboardData: {
-    casual_intro: "Hey Ryan! Your blend of AI with creative tech is super cool. I'm a machine learning geek myself and would love to chat about where our fields intersect. Wanna connect and explore ideas?",
-    content_collab_intro: "Hi Ryan, your recent posts about combining AI with traditional practices got me thinking. How about co-authoring an article exploring the convergence of AI in creative design? Could be a great way to catalyze new ideas.",
-    email: "Subject: Exploring Intersection of AI and Creative Technology\n\nHi Ryan,\n\nI hope this message finds you well. My name is Jessica Malow, and I am deeply immersed in the realms of machine learning and computer vision. I recently came across your impressive work on integrating AI into creative technologies and was fascinated by your insights shared on LinkedIn.\n\nI believe our backgrounds in AI and transformative technologies provide a fascinating intersection, particularly in ethical AI applications in the artistic space. I'd love to explore potential collaboration opportunities and share ideas.\n\nLooking forward to the possibility of connecting.\n\nBest regards,\n\nJessica Malow",
-    icebreaker: "What do you think are the most exciting upcoming trends in using AI to enhance creative platforms and experiences?",
-    intro: "Given both profiles' interest in AI and transformative technologies, a discussion could start on the ethical implications and future applications of AI in creative fields, touching on both technical and creative innovation.",
-    linkedin_message: "Hi Ryan, \n\nI've been following your pioneering work in creative technologies and immersive experiences. As someone passionate about AI and machine learning, I'm inspired by your innovative approaches in the tech-art space. Would love to connect and share insights! \n\nBest, Jessica",
-    linkedin_url: "https://linkedin.com/in/jessicamalow",
-    match: "Both profiles exhibit strong innovative and technical capabilities, with Profile 1 focusing on machine learning, AI, and engineering, while Profile 2 focuses on creative technologies and immersive experiences. Their common ground lies in artificial intelligence and leveraging cutting-edge technology to create impactful solutions, making for an intriguing potential collaboration.",
-    name: "Jessica Malow",
-    profile: "Jessica Malow is a results-driven and highly skilled engineer with a comprehensive background in Bioengineering and Electrical Engineering & Computer Science from UC Berkeley. Specialized in machine learning, computer vision, robotics, and medical devices, she has a proven ability to develop innovative solutions to complex problems. She is proficient in Python, C++, Java, and Swift, and has extensive experience with frameworks like TensorFlow and PyTorch. Her research experience includes working with the Berkeley Sensor & Actuator Center on computer vision techniques using OpenCV and Dlib, and developing AI features for portable ultrasound devices at iSono Health.",
-    profile_agent: "Jessica Malow is a dynamic machine learning researcher with a robust background in Bioengineering and Electrical Engineering & Computer Science. Her expertise lies in developing impactful AI solutions, particularly in the realms of medical devices and computer vision. With strong programming skills and experience in CAD, Jessica is known for her innovative approaches and effective teamwork abilities. She thrives in research and development environments, constantly aiming to push the boundaries of technology and collaboration.",
-    twitter_dm: "Hi Ryan! Just read about your fascinating work in blending AI with 3D user-generated content. As an AI researcher, I'd love to discuss how these creative tech paradigms intertwine. Up for a chat sometime? \n\n- Jessica",
-    twitter_public_message: "@RyanXponent Love your initiative on enabling creators with immersive experiences. As someone deeply into AI and machine learning, I'd love to see how we're pushing tech boundaries together. Let's connect! #Innovation #AIandTech"
+    casual_intro: "-----",
+    content_collab_intro: "------",
+    email: "-----",
+    icebreaker: "-------",
+    intro: "------",
+    linkedin_message: "----",
+    linkedin_url: "------",
+    match: "-----",
+    name: "------",
+    profile: "-----",
+    profile_agent: "------",
+    twitter_dm: "-------",
+    twitter_public_message: "------"
   }
 }
 
@@ -41,7 +41,7 @@ export default function NetworkingDashboard() {
     const fetchData = async () => {
       // Your async logic here
       const data = await getImage();
-      setSimulatedUserProfilePicture(data?.response.picture??"");
+      setSimulatedUserProfilePicture(data?.response.picture ?? "");
     };
 
     fetchData();
@@ -64,12 +64,12 @@ export default function NetworkingDashboard() {
         body: JSON.stringify(payload)
       });
 
-      if (!response.ok) {
+      if (!response.ok)
         throw new Error(`HTTP error! Status: ${response.status}`);
-      }
 
       const data = await response.json();
       const user: UserProfile = data.response;
+
       return user;
     } catch (error) {
       console.error("Error:", error);
@@ -104,7 +104,8 @@ export default function NetworkingDashboard() {
           <p className="text-sm">{dashboard.match}</p>
         </CardContent>
       </Card>
-      <Simulation simulatedUser={data.dashboardData} picture ={simulatedUserProfilePicture} />
+
+      <Simulation simulatedUser={dashboard} picture={simulatedUserProfilePicture} />
 
       <Tabs defaultValue="icebreakers" className="w-full mt-2">
         <TabsList className="grid w-full grid-cols-3">

@@ -163,7 +163,7 @@ export default function Chat() {
             {chatHistory.length == 0 &&
               <div className="gap-2 flex w-full overflow-x-scroll  py-2 -mb-4">
                 <Button className="flex-grow" onClick={() => handleSuggestion("I'm looking for a front-end developer")}>Find a front-end developer</Button>
-                <Button className="flex-grow" onClick={() => handleSuggestion("I'm looking for a marketing specialist for B2C solutions")}>Find a marketing specialist for B2C solutions</Button>
+                <Button className="flex-grow" onClick={() => handleSuggestion("I'm looking for a experienced professional with over 12 years in applied machine learning, predictive modeling, data science, and visualization")}>Find experienced AI Engineer</Button>
                 <Button className="flex-grow" onClick={() => handleSuggestion("I'm looking for a designer to design my logo")}>Find a designer to design my logo</Button>
               </div>}
           </CardFooter>
