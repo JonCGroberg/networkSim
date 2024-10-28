@@ -11,6 +11,7 @@ import { navigate } from "astro:transitions/client";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
+import { useElevenLabsPlayback } from '@/hooks/useElevenLabsPlayback';
 
 interface ChatItem {
     speaker: string
@@ -20,6 +21,7 @@ interface ChatItem {
 
 export default function Simulation({ simulatedUser, picture }: { simulatedUser: any, picture: string }) {
     const [chatHistory, setChatHistory] = useState<ChatItem[]>([]);
+    const { isPlaying, startPlayback, stopPlayback } = useElevenLabsPlayback(chatHistory);
 
     const chatContentRef = useRef<HTMLDivElement>(null);
     const userProfile = useStore(mainUser);
@@ -59,10 +61,10 @@ export default function Simulation({ simulatedUser, picture }: { simulatedUser: 
         }
 
         simulate();
-    },[simulatedUser]);
+    }, [simulatedUser]);
 
     return (
-        <Card className="w-full h-[600px] mx-auto  flex flex-col py-2">
+        <Card className="w-full h-[600px] mx-auto flex flex-col py-2">
             <CardHeader className="flex flex-row items-center border-b px-4 py-3">
                 <div className="flex items-center w-full space-x-3">
                     <span className="flex gap-4">
@@ -75,7 +77,15 @@ export default function Simulation({ simulatedUser, picture }: { simulatedUser: 
                             <p className="text-xs text-gray-500 dark:text-gray-400">{simulatedUser.profile.substring(0, 60) + "..."}</p>
                         </div>
                     </span>
-                    <div className="flex-grow"></div>
+                    <div className="flex-grow">
+                        <Button
+                            onClick={isPlaying ? stopPlayback : startPlayback}
+                            variant="outline"
+                            size="sm"
+                        >
+                            {isPlaying ? 'Stop' : 'Play'}
+                        </Button>
+                    </div>
                     <span className="flex text-right gap-4 float-right">
                         <div>
                             <p className="text-sm font-medium leading-none"> {userProfile?.response.full_name} </p>
@@ -86,6 +96,8 @@ export default function Simulation({ simulatedUser, picture }: { simulatedUser: 
                         </Avatar>
                     </span>
                 </div>
+                <div className="flex-grow"></div>
+
             </CardHeader>
             <CardContent ref={chatContentRef} className="px-4 flex-grow py-6 space-y-4  overflow-scroll">
                 {chatHistory.map((chatItem, index) => chatItem.speaker === "B" ?
